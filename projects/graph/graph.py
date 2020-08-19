@@ -44,24 +44,46 @@ class Graph:
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+
+        # This represents the path we've taken to get where we want to go.
+        path = []
+
+        # Create an empty set to track visited vertices. <====== THIS IS VERY IMPORTANT. DON'T GET STUCK IN A LOOP.
+        visited = set()
 
         # Create an empty queue and enqueue the starting_vertex
-        # Create an empty set to track visited vertices. <====== THIS IS VERY IMPORTANT. DON'T GET STUCK IN A LOOP.
+        queue = Queue()
+        queue.enqueue(starting_vertex)
 
         # while queue is not empty:
-        # get current vertex (dequeue from queue)
-        # set the current vertex to the LAST element on the PATH (current_vertex = path[-1])
+        while queue.size() > 0:
 
-        # check if the current vertex has not been visited:
-        # print the current vertex
-        # mark the current vertex as visited
-        # add the current vertex to a visited_set
+            # get current vertex (dequeue from queue)
+            first_element = queue.dequeue()
 
-        # Queue up NEW paths with each neighbor:
-        # take the current path
-        # append the neighbor to it.
-        # queue up NEW path.
+            # set the current vertex to the LAST element on the PATH (current_vertex = path[-1])
+            current_vertex = first_element
+
+            # check if the current vertex has not been visited:
+            if current_vertex not in visited:
+
+                # mark the current vertex as visited
+                path.append(current_vertex)
+
+                # print the current vertex
+                print(current_vertex)
+
+                # Get the neighbors of the current vertex.
+                neighbors = self.get_neighbors(current_vertex)
+
+                for i in neighbors:
+                    queue.enqueue(i)
+
+                # add the current vertex to a visited_set
+                visited.add(current_vertex)
+
+        print(path)
+        return path
 
     def dft(self, starting_vertex):
         """
@@ -156,6 +178,8 @@ if __name__ == '__main__':
     graph.add_edge(3, 5)
     graph.add_edge(2, 3)
     graph.add_edge(4, 6)
+
+    graph.bft(1)
 
     '''
     Should print:
