@@ -140,26 +140,60 @@ class Graph:
         """
         pass  # TODO
 
+        # What do I need to do in order to have this algorithm function?
+        #
+
     def bfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing the shortest path from
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+
+        # This represents the path we've taken to get where we want to go.
+        path = []
+
+        # Create an empty set to track visited vertices. <====== THIS IS VERY IMPORTANT. DON'T GET STUCK IN A LOOP.
+        visited = set()
 
         # Create an empty queue and enqueue the starting_vertex
-        # Create an empty set to track visited vertices. <====== THIS IS VERY IMPORTANT. DON'T GET STUCK IN A LOOP.
+        queue = Queue()
+        queue.enqueue(starting_vertex)
 
         # while queue is not empty:
-        # get current vertex (dequeue from queue)
+        while queue.size() > 0:
 
-        # check if the current vertex has not been visited:
-        # check if current vertex is DESTINATION.
-        # If it IS, stop and return that vertex.
-        # print the current vertex
-        # mark the current vertex as visited
-        # add the current vertex to a visited_set
+            # get current vertex (dequeue from queue)
+            first_element = queue.dequeue()
+
+            # set the current vertex to the dequeued element.
+            current_vertex = first_element
+
+            if current_vertex == destination_vertex:
+                visited.add(current_vertex)
+                path.append(current_vertex)
+                return path
+
+            # check if the current vertex has not been visited:
+            if current_vertex not in visited:
+
+                # mark the current vertex as visited
+                path.append(current_vertex)
+
+                # print the current vertex
+                print(current_vertex)
+
+                # Get the neighbors of the current vertex.
+                neighbors = self.get_neighbors(current_vertex)
+
+                for i in neighbors:
+                    queue.enqueue(i)
+
+                # add the current vertex to a visited_set
+                visited.add(current_vertex)
+
+        print(path)
+        return path
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -238,7 +272,7 @@ if __name__ == '__main__':
     Valid BFS path:
         [1, 2, 4, 6]
     '''
-    # print(graph.bfs(1, 6))
+    print("Maybe this will work? ", graph.bfs(1, 6))
 
     '''
     Valid DFS paths:
