@@ -61,7 +61,7 @@ class Graph:
             # get current vertex (dequeue from queue)
             first_element = queue.dequeue()
 
-            # set the current vertex to the LAST element on the PATH (current_vertex = path[-1])
+            # set the current vertex to the dequeued element.
             current_vertex = first_element
 
             # check if the current vertex has not been visited:
@@ -90,24 +90,46 @@ class Graph:
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
 
-        # Create an empty stack and add the starting_vertex
+        # This represents the path we've taken to get where we want to go.
+        path = []
+
         # Create an empty set to track visited vertices. <====== THIS IS VERY IMPORTANT. DON'T GET STUCK IN A LOOP.
+        visited = set()
 
-        # while stack is not empty:
-        # get current vertex (pop from stack)
-        # set the current vertex to the LAST element on the PATH (current_vertex = path[-1])
+        # Create an empty queue and enqueue the starting_vertex
+        stack = Stack()
+        stack.push(starting_vertex)
 
-        # check if the current vertex has not been visited:
-        # print the current vertex
-        # mark the current vertex as visited
-        # add the current vertex to a visited_set
+        # while queue is not empty:
+        while stack.size() > 0:
 
-        # Queue up NEW paths with each neighbor:
-        # take the current path
-        # append the neighbor to it.
-        # queue up NEW path.
+            # get current vertex (dequeue from queue)
+            first_element = stack.pop()
+
+            # set the current vertex to the dequeued element.
+            current_vertex = first_element
+
+            # check if the current vertex has not been visited:
+            if current_vertex not in visited:
+
+                # mark the current vertex as visited
+                path.append(current_vertex)
+
+                # print the current vertex
+                print(current_vertex)
+
+                # Get the neighbors of the current vertex.
+                neighbors = self.get_neighbors(current_vertex)
+
+                for i in neighbors:
+                    stack.push(i)
+
+                # add the current vertex to a visited_set
+                visited.add(current_vertex)
+
+        print(path)
+        return path
 
     def dft_recursive(self, starting_vertex):
         """
@@ -179,8 +201,6 @@ if __name__ == '__main__':
     graph.add_edge(2, 3)
     graph.add_edge(4, 6)
 
-    graph.bft(1)
-
     '''
     Should print:
         {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
@@ -202,7 +222,7 @@ if __name__ == '__main__':
         1, 2, 4, 3, 7, 6, 5
         1, 2, 4, 3, 7, 5, 6
     '''
-    # graph.bft(1)
+    graph.bft(1)
 
     '''
     Valid DFT paths:
@@ -211,7 +231,7 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
-    # graph.dft(1)
+    graph.dft(1)
     # graph.dft_recursive(1)
 
     '''
