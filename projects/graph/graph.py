@@ -46,7 +46,8 @@ class Graph:
         """
 
         # This represents the path we've taken to get where we want to go.
-        path = []
+        # path = []
+        string = ""
 
         # STEP 1: Create a queue
         queue = Queue()
@@ -72,7 +73,9 @@ class Graph:
                 # print current vertex
                 print(current_vertex)
 
-                path.append(current_vertex)
+                # path.append(current_vertex)
+                string += str(current_vertex)
+                string += '\n'
 
                 # Get the neighbors of the current vertex.
                 neighbors = self.get_neighbors(current_vertex)
@@ -80,8 +83,8 @@ class Graph:
                 for i in neighbors:
                     queue.enqueue(i)
 
-        print(path)
-        return path
+        # print(path)
+        return string
 
     def dft(self, starting_vertex):
         """
@@ -335,7 +338,7 @@ if __name__ == '__main__':
         1, 2, 4, 3, 7, 6, 5
         1, 2, 4, 3, 7, 5, 6
     '''
-    # print("bft return: ", graph.bft(1))
+    print("bft return: ", graph.bft(1))
 
     '''
     Valid DFT paths:
@@ -344,19 +347,19 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
-    # graph.dft(1)
-    graph.dft_recursive(1)
+    print("dft return: ", graph.dft(1))
+    # graph.dft_recursive(1)
 
     '''
     Valid BFS path:
         [1, 2, 4, 6]
     '''
-    # print(graph.bfs(1, 6))
+    print("bfs return: ", graph.bfs(1, 6))
 
     '''
     Valid DFS paths:
         [1, 2, 4, 6]
         [1, 2, 4, 7, 6]
     '''
-    # print('graph dfs: ', graph.dfs(1, 6))
-    print('recursive graph dfs: ', graph.dfs_recursive(1, 6))
+    print('dfs return: ', graph.dfs(1, 6))
+    # print('recursive graph dfs: ', graph.dfs_recursive(1, 6))
