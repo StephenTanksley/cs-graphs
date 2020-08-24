@@ -54,7 +54,7 @@ def child_table(ancestors):
 
 def earliest_ancestor(ancestors, starting_node):
 
-    # Recursive algorithm. Need a visited set and a stack.
+    # Iterative algorithm. I'll use a stack to keep track of the current element.
     stack = []
 
     # The child dict contains references to each node's parents.
