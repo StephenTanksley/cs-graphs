@@ -1,14 +1,5 @@
 """
 
- 10
- /
-1   2   4  11
- \ /   / \ /
-  3   5   8
-   \ / \   |
-    6   7   9
-
-
 Write a function that, given the dataset and the ID of an individual in the dataset, returns their earliest known ancestor – the one at the farthest distance from the input individual. If there is more than one ancestor tied for "earliest", return the one with the lowest numeric ID. If the input individual has no parents, the function should return -1.
 
 If we wanted the earliest ancestor of 9, we'd traverse up the graph to find 8. From 8, there would be two possible ancestor vertices (4 and 11). We'd keep track of both 4 and 11. If neither 4 nor 11 have any earlier ancestors, we return the ancestor with the lower numeric id (4).
@@ -24,29 +15,29 @@ test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
     
     SOLUTION: I think a dictionary would work well here. I could populate a dictionary with all of the values from the tuples with the key being a child node and the values being a list of possible parent nodes.
 
-    I begin by populating the dictionary with my parent:child pairs. Once I have my dictionary populated, I should have a data structure I can reference easily.
-    
-    THE PROGRAM:
-    
-    set current_node = starting_node
-    
-    if current_node has no parents:
-        return -1
-    
-    while current_node has parents:
-        1) check the value of each parent node.
-        2) Find the node with the lower id value.
-        3) set the current node to that node.
-        
-    return current_node
-
+    I begin by populating the dictionary with my parent:child pairs. Once I have my dictionary populated, I should have a data structure I can reference easily. We can start with 
 """
 
 # I like to separate the logic of my helper functions out so it doesn't clutter up my main function.
 
 
-def build_table(ancestors):
+def parent_table(ancestors):
 
+    # Instantiate a table.
+    table = {}
+
+    for pair in ancestors:
+        parent = pair[0]
+        child = pair[1]
+
+        if parent not in table:
+            table[parent] = [child]
+        else:
+            table[parent].append(child)
+    return table
+
+
+def child_table(ancestors):
     # Instantiate a table.
     table = {}
 
@@ -63,49 +54,44 @@ def build_table(ancestors):
 
 def earliest_ancestor(ancestors, starting_node):
 
-    # Get a reference to our data structure at the beginning.
-    table = build_table(ancestors)
+    # Recursive algorithm. Need a visited set and a stack.
+    stack = []
 
-    print(table)
+    # The child dict contains references to each node's parents.
+    child_dict = child_table(ancestors)
 
-    """
-    starting_node = 9
+    # The parent dict contains references to each node's children.
+    parent_dict = parent_table(ancestors)
+
+    # We should only be returning a -1 if our original starting node has no parents.
+    if starting_node in parent_dict and starting_node not in child_dict:
+        print(f"This starting node ({starting_node}) has no parents.")
+        return -1
+
     current_node = starting_node
-    
-    If I'm starting at node 9, that means the only possible parent at that case will be node 8.
-    
-    table[9] = [8]
-    
-    So the smallest possible parent node for 9 will be 8.
-    
-    smallest_parent = min(table[current_node])
-    
-    
-    # We want to reassign the current node so now we're looking at the next level up in the list.
-    current_node = smallest_parent
-    
-    
-    
-    """
 
-    # Breaking condition - if our starting node has no parents. This could only happen in the test case if our input node was 10.
+    # add the starting node to the visited set so we won't backtrack.
+    stack.append(current_node)
 
-    if starting_node not in table:
-        return -1
+    while len(stack) > 0:
+        print("Here's the item in the stack: ", stack)
+        # Remove the item from the stack. We should only have one item at a time because we're only ever
+        node = stack.pop(0)
 
-    if len(table[starting_node]) == 0:
-        return -1
+        # if a node is still in the child dict, that means we haven't reached all the way up to the top.
+        if node in child_dict:
+            parent_min = min(child_dict[node])
+            stack.append(parent_min)
 
-    # # set our current node. This value will change as we move along the table.
-    # current_node = starting_node
-
-    # while len(table[current_node]) != 0:
-
-    #     # We always want to be taking the smaller parent as the
-    #     smaller_parent = min(table[current_node])
-    #     current_node = smaller_parent
-
-    # return current_node
+        # If a node is in the parent dict and it ISN'T in the child dict, that means we've hit the key we want and should return it.
+        if node in parent_dict and node not in child_dict:
+            return node
 
 
-earliest_ancestor(test_ancestors, 10)
+# Just a quick little test runner.
+def run_function(arr):
+    for i in range(len(arr) + 1):
+        print(earliest_ancestor(arr, i))
+
+
+run_function(test_ancestors)
