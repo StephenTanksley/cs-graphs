@@ -1,13 +1,21 @@
 """
 
-Write a function that, given the dataset and the ID of an individual in the dataset, returns their earliest known ancestor – the one at the farthest distance from the input individual. If there is more than one ancestor tied for "earliest", return the one with the lowest numeric ID. If the input individual has no parents, the function should return -1.
+    '''
+       10
+     /
+    1   2   4  11
+     \ /   / \ /
+      3   5   8
+       \ / \   \
+        6   7   9
+    '''
 
-If we wanted the earliest ancestor of 9, we'd traverse up the graph to find 8. From 8, there would be two possible ancestor vertices (4 and 11). We'd keep track of both 4 and 11. If neither 4 nor 11 have any earlier ancestors, we return the ancestor with the lower numeric id (4).
+Write a function that, given the dataset and the ID of an individual in the dataset, returns their earliest known ancestor – the one at the farthest distance from the input individual. If there is more than one ancestor tied for "earliest", return the one with the lowest numeric ID. If the input individual has no parents, the function should return -1.
 
 """
 
-test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
-                  (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
+# test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
+#                   (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
 
 
 """
@@ -15,10 +23,25 @@ test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
     
     SOLUTION: I think a dictionary would work well here. I could populate a dictionary with all of the values from the tuples with the key being a child node and the values being a list of possible parent nodes.
 
-    I begin by populating the dictionary with my parent:child pairs. Once I have my dictionary populated, I should have a data structure I can reference easily. We can start with 
+    I begin by populating the dictionary with my parent:child pairs. Once I have my dictionary populated, I should have a data structure I can reference easily. 
+    
+    We can start with the original starting item and then compare that value to the values in the dictionary.
+        1) If the starting value is already in a parent dict and not in a child dict, we should return -1 
+            because there isn't an earlier ancestor to be found.
+            
+        2) If the starting value is in the child dict, we can choose to only pick the minimum value from our 
+            child_dict, so we throw that value onto the stack and use that as the current_node.
+                
+        3) If the starting value is ONLY in the parent dict after we've already started our traversal, we know 
+            that 
+        
 """
 
 # I like to separate the logic of my helper functions out so it doesn't clutter up my main function.
+
+
+test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
+                  (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
 
 
 def parent_table(ancestors):
@@ -54,9 +77,6 @@ def child_table(ancestors):
 
 def earliest_ancestor(ancestors, starting_node):
 
-    # Iterative algorithm. I'll use a stack to keep track of the current element.
-    stack = []
-
     # The child dict contains references to each node's parents.
     child_dict = child_table(ancestors)
 
@@ -65,17 +85,16 @@ def earliest_ancestor(ancestors, starting_node):
 
     # We should only be returning a -1 if our original starting node has no parents.
     if starting_node in parent_dict and starting_node not in child_dict:
-        print(f"This starting node ({starting_node}) has no parents.")
         return -1
 
-    current_node = starting_node
+    # Set the current node to the beginning node in the algorithm.
+    # Iterative algorithm. I'll use a stack to keep track of the current element.
+    stack = [starting_node]
 
-    # add the starting node to the visited set so we won't backtrack.
-    stack.append(current_node)
-
+    # This kinda has the soul of a recursive algorithm without actually being recursive.
     while len(stack) > 0:
-        print("Here's the item in the stack: ", stack)
-        # Remove the item from the stack. We should only have one item at a time because we're only ever
+
+        # Remove the item from the stack. We should only have one item at a time because we're only ever added one at a time (the minimum value from the parents)
         node = stack.pop(0)
 
         # if a node is still in the child dict, that means we haven't reached all the way up to the top.
