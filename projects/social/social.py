@@ -1,11 +1,24 @@
+import random
+
+names = open("baseball_names.txt", "r")
+
+usernames = names.read().split('\n')
+
+names.close()
+
+
 class User:
     def __init__(self, name):
         self.name = name
 
+
 class SocialGraph:
     def __init__(self):
         self.last_id = 0
+        # maps IDs to User Objects.
         self.users = {}
+
+        #
         self.friendships = {}
 
     def add_friendship(self, user_id, friend_id):
@@ -46,7 +59,32 @@ class SocialGraph:
 
         # Add users
 
+        for i in range(0, num_users):
+            self.add_user(f"User-{i + 1}")
+
         # Create friendships
+        # Generate ALL possible friendships.
+        # Avoid duplicate friendships.
+
+        possible_friendships = []
+
+        for user_id in self.users:
+            for friend_id in range(user_id + 1, self.last_id + 1):
+
+                # user_id == user_id_2 cannot happen.
+                # If friendship between user_id and user_id_2 already exists
+                #   don't add friendship between user_id_2 and user_id
+
+                possible_friendships.append((user_id, friend_id))
+        # Randomly select x friendships.
+
+        random.shuffle(possible_friendships)
+        num_friendships = num_users * avg_friendships // 2
+        for i in range(0, num_friendships):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
+
+        print("possible friendships: ", possible_friendships)
 
     def get_all_social_paths(self, user_id):
         """
@@ -57,7 +95,14 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
-        visited = {}  # Note that this is a dictionary, not a set
+        visited = {}
+        # example_visited = {
+
+        #     2: [1, 2],
+        #     3: [1, 2, 3],
+
+        #     }
+        # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
         return visited
 

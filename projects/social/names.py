@@ -8,20 +8,12 @@ last_names = ["McDichael", "Sweemey", "Archideld", "Smorin", "McSriff", "Mixon",
               "Chamgerlain", "Nogilny", "Smehrik", "Dugnutt", "Dustice", "Gride", "Dourque", "Furcotte", "Wesrey", "Truk", "Rortugal", "Sandaele", "Dandleton", "Sernandez", "Bonzalez", "Bisels", "Nitvarn", "Hote", "Bitzron", "Janglosti", "Tellron", "Hary", "Olerberz", "Ginlons", "Wonkoz", "Mlitnirt", "Sasdarl", "Pooth", "Dick", "Hintline", "Gamo", "Laob", "Genmist", "O'Erson", "Shitwon", "Peare", "Mlynren", "Doober", "Wapko", "Jorgeudey", "Banps", "Forta", "Jivliiz", "Wobses", "Boyo", "Loovensan", "Welronz", "Rodylar", "Swermirstz", "Robenko"]
 
 
-len_first_list = len(first_names)
-len_second_list = len(last_names)
-
-
-print(len_first_list)
-print(len_second_list)
-
-
 def random_name(arr):
     index = math.floor(random.random() * len(arr))
     return arr[index]
 
 
-# I want to make sure all the names are unique, so I'm going to store them as a set.
+# I want to make sure all the names are unique, so I'm going to store them as a list and then convert them to a set later.
 full_names = []
 
 
@@ -36,5 +28,10 @@ def full_name(name1, name2):
 for _ in range(2001):
     full_name(first_names, last_names)
 
+unique_names = set(full_names)
 
-print(full_names)
+with open("baseball_names.txt", 'w+') as f:
+    for i in unique_names:
+        f.write(f'{i}\n')
+
+f.close()
