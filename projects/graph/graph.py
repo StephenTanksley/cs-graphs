@@ -46,8 +46,8 @@ class Graph:
         """
 
         # This represents the path we've taken to get where we want to go.
-        # path = []
-        string = ""
+        path = []
+        # string = ""
 
         # STEP 1: Create a queue
         queue = Queue()
@@ -73,9 +73,9 @@ class Graph:
                 # print current vertex
                 print(current_vertex)
 
-                # path.append(current_vertex)
-                string += str(current_vertex)
-                string += '\n'
+                path.append(current_vertex)
+                # string += str(current_vertex)
+                # string += '\n'
 
                 # Get the neighbors of the current vertex.
                 neighbors = self.get_neighbors(current_vertex)
@@ -84,7 +84,8 @@ class Graph:
                     queue.enqueue(i)
 
         # print(path)
-        return string
+        # return string
+        return path
 
     def dft(self, starting_vertex):
         """
