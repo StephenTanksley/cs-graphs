@@ -1,11 +1,5 @@
 import random
 
-names = open("baseball_names.txt", "r")
-
-usernames = names.read().split('\n')
-
-names.close()
-
 
 class User:
     def __init__(self, name):
@@ -15,10 +9,11 @@ class User:
 class SocialGraph:
     def __init__(self):
         self.last_id = 0
-        # maps IDs to User Objects.
+
+        # maps IDs to User Objects. Users represent vertices in this case.
         self.users = {}
 
-        #
+        # These are our edges. Edges are the connections ("friendships") between users.
         self.friendships = {}
 
     def add_friendship(self, user_id, friend_id):
@@ -55,10 +50,9 @@ class SocialGraph:
         self.last_id = 0
         self.users = {}
         self.friendships = {}
+
         # !!!! IMPLEMENT ME
-
         # Add users
-
         for i in range(0, num_users):
             self.add_user(f"User-{i + 1}")
 
@@ -84,7 +78,7 @@ class SocialGraph:
             friendship = possible_friendships[i]
             self.add_friendship(friendship[0], friendship[1])
 
-        print("possible friendships: ", possible_friendships)
+        # print("possible friendships: ", possible_friendships)
 
     def get_all_social_paths(self, user_id):
         """
@@ -94,8 +88,46 @@ class SocialGraph:
         extended network with the shortest friendship path between them.
 
         The key is the friend's ID and the value is the path.
+
+        This is going to be a breadth first traversal of the graph returning the shortest path between users A and B.
+
         """
+
+        # Step 1) Create a queue.
+        queue = []
+
+        # Step 2) Add a 'visited' dict to weed out duplicates.
         visited = {}
+
+        # Step 3) Add the starting vertex.
+        queue.append([user_id])
+
+        while len(queue) > 0:
+            
+            path = queue.pop(0)
+            
+
+            if current_vertex not in visited:
+                path.append(current_vertex)
+
+            print(current_vertex)
+
+            # Get the friends of the current user.
+            friends = self.friendships[user_id]
+
+            print(queue)
+
+            return queue
+            # for i in friends:
+            #     queue.append(i)
+
+            # visited[user_id] = path
+
+            # print(f"This returns the friends for {user_id}: {friends}")
+
+        # friends = self.friendships[user_id]
+
+        # print("friends: ", friends)
         # example_visited = {
 
         #     2: [1, 2],
@@ -103,7 +135,7 @@ class SocialGraph:
 
         #     }
         # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+
         return visited
 
 
