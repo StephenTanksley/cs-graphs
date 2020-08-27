@@ -1,6 +1,23 @@
 import random
 
 
+class Queue():
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, value):
+        self.queue.append(value)
+
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+
+    def size(self):
+        return len(self.queue)
+
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -88,28 +105,32 @@ class SocialGraph:
 
         """
         # Instantiate a queue.
-        queue = []
+        queue = Queue()
 
         # Step 1: Need to track visited vertices.
         visited = {}
 
-        queue.append(user_id)
+        # Step 2: Add first user_id to the queue as a path.
+        queue.enqueue([user_id])
 
         # We're gonna grab the first thing off of our queue and use that as our current user.
-        # We want to grab all of the friends for that user
-        while len(queue) > 0:
-            path = []
-            current_user = queue.pop()
+        # We want to grab all of the friends for that user.
+        # We're going to use those friends to populate our queue and fill out the entire social network.
 
-            if current_user not in visited:
+        while queue.size() > 0:
+            current_path = queue.dequeue()
+            current_vertex = current_path[-1]
 
-                neighbors = self.friendships[current_user]
-                visited[current_user] = path
+            if current_vertex not in visited:
 
-                for item in neighbors:
-                    queue.append(item)
-                    visited[current_user].append(item)
+                visited[current_vertex] = current_path
 
+                for item in self.friendships[current_vertex]:
+                    # We create a copy here to avoid mutating the original.
+                    new_path = current_path.copy()
+
+                    new_path.append(item)
+                    queue.enqueue(new_path)
         return visited
 
 
