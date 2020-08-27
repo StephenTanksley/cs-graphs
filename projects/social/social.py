@@ -64,11 +64,6 @@ class SocialGraph:
 
         for user_id in self.users:
             for friend_id in range(user_id + 1, self.last_id + 1):
-
-                # user_id == user_id_2 cannot happen.
-                # If friendship between user_id and user_id_2 already exists
-                #   don't add friendship between user_id_2 and user_id
-
                 possible_friendships.append((user_id, friend_id))
         # Randomly select x friendships.
 
@@ -92,49 +87,28 @@ class SocialGraph:
         This is going to be a breadth first traversal of the graph returning the shortest path between users A and B.
 
         """
-
-        # Step 1) Create a queue.
+        # Instantiate a queue.
         queue = []
 
-        # Step 2) Add a 'visited' dict to weed out duplicates.
+        # Step 1: Need to track visited vertices.
         visited = {}
 
-        # Step 3) Add the starting vertex.
-        queue.append([user_id])
+        queue.append(user_id)
 
+        # We're gonna grab the first thing off of our queue and use that as our current user.
+        # We want to grab all of the friends for that user
         while len(queue) > 0:
-            
-            path = queue.pop(0)
-            
+            path = []
+            current_user = queue.pop()
 
-            if current_vertex not in visited:
-                path.append(current_vertex)
+            if current_user not in visited:
 
-            print(current_vertex)
+                neighbors = self.friendships[current_user]
+                visited[current_user] = path
 
-            # Get the friends of the current user.
-            friends = self.friendships[user_id]
-
-            print(queue)
-
-            return queue
-            # for i in friends:
-            #     queue.append(i)
-
-            # visited[user_id] = path
-
-            # print(f"This returns the friends for {user_id}: {friends}")
-
-        # friends = self.friendships[user_id]
-
-        # print("friends: ", friends)
-        # example_visited = {
-
-        #     2: [1, 2],
-        #     3: [1, 2, 3],
-
-        #     }
-        # Note that this is a dictionary, not a set
+                for item in neighbors:
+                    queue.append(item)
+                    visited[current_user].append(item)
 
         return visited
 
